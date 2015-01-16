@@ -1,0 +1,11 @@
+# ignore all
+/*
+.DS_Store
+*.db
+# except src and certificates folders
+!/src
+!/certificates
+!*.md
+!.gitignore
+# ignore all in certificates folder (you need to add here your own certificate)
+/certificates/*

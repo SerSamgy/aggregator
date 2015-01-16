@@ -19,13 +19,33 @@ KangoAPI.onReady(function() {
                                 span.textContent = tabs[i].getTitle();
                                 div.appendChild(input);
                                 div.appendChild(span);
-                                document.body.appendChild(div);
+                                document.body.firstElementChild.appendChild(div);
                         	// var li = document.createElement("li");
                         	// li.textContent = tabs[i].getTitle();
                          //        ul.appendChild(li);
-                                kango.console.log(tabs[i].getUrl());
+                                // kango.console.log(tabs[i].getUrl());
                         }
                         // document.body.appendChild(ul);
                 });
 	});
+
+    document.getElementById('popup-get').onclick = function() {
+        var get_details = {
+            url: 'http://localhost:8080/',
+            method: 'GET',
+            async: false,
+            contentType: 'json'
+        };
+        kango.xhr.send(get_details, function(data) {
+            var info = data.response;
+            for (var i = info.length - 1; i >= 0; i--) {
+                kango.console.log(info[i][0]);
+                kango.browser.tabs.create({url: info[i][0], focused: false})
+            };
+            // kango.console.log(info);
+        });
+    };
+
 });
+
+// for (i=0; i<document.body.firstElementChild.children.length; i++) {console.log(document.body.firstElementChild.children[i].children[0].checked)}

@@ -4,6 +4,9 @@ from tornado.web import RequestHandler, Application, url
 import sqlite3
 import json
 
+# TODO: - сделать возможным запуск сервера через консоль со спец. параметрами (порт для прослушивания, имя БД и т.п.);
+# TODO: - сделать скрипт создания БД
+
 def _execute(query, params=()):
 	"""Function to execute queries against a local sqlite database"""
 	dbPath = "database.db"
@@ -21,6 +24,7 @@ def _execute(query, params=()):
 class MainApplication(Application):
 	"""Main application"""
 	def __init__(self, **kw):
+		# TODO: реализовать страницу авторизации
 		handlers = [
 			url(r"/", MainHandler),
 		]
@@ -39,7 +43,11 @@ class MainHandler(RequestHandler):
 
 	def post(self):
 		"""Post new data as a JSON"""
+		# TODO: сделать проверку параметров запроса
+		# TODO: попробовать сделать экранирование знаков # и ?
 		new_data = self.get_arguments('link')
+		# delete all rows before writing
+		_execute("DELETE FROM links")
 		for link in new_data:
 			_execute("INSERT INTO links (link) VALUES (?)", (link,))
 		self.write(json.dumps({'result': 'OK'}))
