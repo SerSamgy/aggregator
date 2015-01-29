@@ -15,6 +15,7 @@ KangoAPI.onReady(function() {
                                 var input = document.createElement('input');
                                 input.setAttribute('type', 'checkbox');
                                 input.setAttribute('id', tabs[i].getId());
+                                input.setAttribute('value', tabs[i].getUrl());
                                 var span = document.createElement('span');
                                 span.textContent = tabs[i].getTitle();
                                 div.appendChild(input);
@@ -39,13 +40,37 @@ KangoAPI.onReady(function() {
         kango.xhr.send(get_details, function(data) {
             var info = data.response;
             for (var i = info.length - 1; i >= 0; i--) {
-                kango.console.log(info[i][0]);
+                // kango.console.log(info[i][0]);
                 kango.browser.tabs.create({url: info[i][0], focused: false})
             };
             // kango.console.log(info);
         });
     };
 
-});
+    document.getElementById('popup-send').onclick = function() {
+        var send_details = {
+            method: 'POST',
+            url: 'http://localhost:8080/',
+            async: true,
+            params: {'link': []}, // all values in parameter 'link' will be separated using comma
+            contentType: 'json'
+        };
+        for (var i = 0; i < document.body.firstElementChild.children.length; i++) {
+            var child = document.body.firstElementChild.children[i].children[0];
+            if (child.checked) {
+                send_details['params']['link'].push(child.value);
+            };
+        };
+        // kango.console.log(send_details);
+        kango.xhr.send(send_details, function(data) {
+            if (data.status == 200 && data.response != null) {
+                var text = data.response;
+                kango.console.log(text);
+            } 
+            else {
+                kango.console.log('Something went wrong!')
+            };
+        });
+    };
 
-// for (i=0; i<document.body.firstElementChild.children.length; i++) {console.log(document.body.firstElementChild.children[i].children[0].checked)}
+});

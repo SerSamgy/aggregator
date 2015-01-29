@@ -45,7 +45,7 @@ class MainHandler(RequestHandler):
 		"""Post new data as a JSON"""
 		# TODO: сделать проверку параметров запроса
 		# TODO: попробовать сделать экранирование знаков # и ?
-		new_data = self.get_arguments('link')
+		new_data = self.get_argument('link').split(',')
 		# delete all rows before writing
 		_execute("DELETE FROM links")
 		for link in new_data:
