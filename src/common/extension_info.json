@@ -1,18 +1,18 @@
 {
     "content_scripts": [
-        "popup.js"
+        "static/js/popup.js"
     ], 
     "description": "Extension description", 
     "creator": "Kango", 
     "background_scripts": [
-        "main.js"
+        "static/js/main.js"
     ], 
     "homepage_url": "http://kangoextensions.com/", 
     "version": "0.9.0", 
     "browser_button": {
-        "caption": "Kango", 
+        "caption": "Aggregator", 
         "icon": "icons/button.png", 
-        "tooltipText": "Kango"
+        "tooltipText": "Aggregator extension - manage your tabs and share 'em with your friends!"
     }, 
     "name": "Aggregator"
 }

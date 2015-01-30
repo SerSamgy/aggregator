@@ -20,7 +20,7 @@ KangoAPI.onReady(function() {
                                 span.textContent = tabs[i].getTitle();
                                 div.appendChild(input);
                                 div.appendChild(span);
-                                document.body.firstElementChild.appendChild(div);
+                                document.getElementById('tab1').firstElementChild.appendChild(div);
                         	// var li = document.createElement("li");
                         	// li.textContent = tabs[i].getTitle();
                          //        ul.appendChild(li);
@@ -71,6 +71,21 @@ KangoAPI.onReady(function() {
                 kango.console.log('Something went wrong!')
             };
         });
+    };
+
+    var theTabs = document.getElementById('Tabs').firstElementChild;
+    theTabs.addEventListener("click", tab, false);
+    function tab(e) {
+        for (var i = theTabs.children.length - 1; i >= 0; i--) {
+            document.getElementById(theTabs.children[i].id.slice(3)).style.display = 'none';
+            theTabs.children[i].setAttribute("class", "");
+        };
+        if (e.target !== e.currentTarget) {
+            var clickedItemParent = e.target.parentElement;
+            document.getElementById(clickedItemParent.id.slice(3)).style.display = 'block';
+            clickedItemParent.setAttribute("class", "active");
+        }
+        e.stopPropagation();
     };
 
 });

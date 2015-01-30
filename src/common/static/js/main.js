@@ -1,4 +1,4 @@
-﻿kango.ui.browserButton.setPopup({url: 'popup.html', width: 710, height: 510});
+﻿kango.ui.browserButton.setPopup({url: 'templates/popup.html', width: 710, height: 510});
 
 function MyExtension() {
     var self = this;
