@@ -53,4 +53,13 @@
 	overflow: hidden;
 }
 
+#Content_Area div.tab_block {
+	padding-left: 15px;
+}
+
+#Content_Area div.tab_block button {
+	margin-left: 5px;
+	margin-top: 5px;
+}
+
 p { padding-left: 15px; }
