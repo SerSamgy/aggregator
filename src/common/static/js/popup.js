@@ -4,22 +4,35 @@
 // @include https://*
 // /==UserScript==
 
+function create_list_div(count_num) {
+    var div = document.createElement('div');
+    div.setAttribute('id', count_num);
+    var input = document.createElement('input');
+    input.setAttribute('type', 'checkbox');
+    var span = document.createElement('span');
+    div.appendChild(input);
+    div.appendChild(span);
+    return div;
+};
+
 KangoAPI.onReady(function() {
+    var get_details = {
+        url: 'http://localhost:8080/',
+        method: 'GET',
+        async: true,
+        contentType: 'json'
+    };
 	// kango.browser.tabs.getAll(function(tabs) {
         kango.browser.windows.getCurrent(function(win) {
                 win.getTabs(function(tabs) {
                         // var ul = document.createElement("ul");
                         for(var i = 0; i < tabs.length; i++) {
-                                var div = document.createElement('div');
-                                div.setAttribute('id', i);
-                                var input = document.createElement('input');
-                                input.setAttribute('type', 'checkbox');
+                                var div = create_list_div(i);
+                                var input = div.firstElementChild;
                                 input.setAttribute('id', tabs[i].getId());
                                 input.setAttribute('value', tabs[i].getUrl());
-                                var span = document.createElement('span');
+                                var span = div.lastElementChild;
                                 span.textContent = tabs[i].getTitle();
-                                div.appendChild(input);
-                                div.appendChild(span);
                                 document.getElementById('tab1').firstElementChild.appendChild(div);
                         	// var li = document.createElement("li");
                         	// li.textContent = tabs[i].getTitle();
@@ -30,13 +43,30 @@ KangoAPI.onReady(function() {
                 });
 	});
 
-    document.getElementById('popup-get').onclick = function() {
-        var get_details = {
-            url: 'http://localhost:8080/',
-            method: 'GET',
-            async: false,
-            contentType: 'json'
+    // TODO: Move to background script
+    kango.xhr.send(get_details, function(data) {
+        var tabsGet = data.response;
+        var divsGet = document.getElementById("tab2").firstElementChild;
+        // kango.console.log(tabsGet);
+        if (tabsGet.length != 0) {
+            for (var i = tabsGet.length - 1; i >= 0; i--) {
+                var div = create_list_div(i);
+                var input = div.firstElementChild;
+                // input.setAttribute('id', tabs[i].getId());
+                // input.setAttribute('value', tabs[i].getUrl());
+                var span = div.lastElementChild;
+                span.textContent = tabsGet[i][0];
+                divsGet.appendChild(div);
+            };
+        } 
+        else {
+            var not_avail = document.createElement('p');
+            not_avail.textContent = "There are no available tabs!";
+            divsGet.appendChild(not_avail);
         };
+    });
+
+    document.getElementById('popup-get').onclick = function() {
         kango.xhr.send(get_details, function(data) {
             var info = data.response;
             for (var i = info.length - 1; i >= 0; i--) {
@@ -55,8 +85,8 @@ KangoAPI.onReady(function() {
             params: {'link': []}, // all values in parameter 'link' will be separated using comma
             contentType: 'json'
         };
-        for (var i = 0; i < document.body.firstElementChild.children.length; i++) {
-            var child = document.body.firstElementChild.children[i].children[0];
+        for (var i = 0; i < document.getElementById("tab1").firstElementChild.children.length; i++) {
+            var child = document.getElementById("tab1").firstElementChild.children[i].firstElementChild;
             if (child.checked) {
                 send_details['params']['link'].push(child.value);
             };
